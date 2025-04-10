@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Token Akses Anda</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f4f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2a9d8f;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .token-box {
+            background-color: #e0f7fa;
+            border-left: 6px solid #2a9d8f;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 16px;
+            word-break: break-all;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Token Akses Anda</h2>
+
+    <div class="label">Akses Token</div>
+    <div class="token-box" th:text="${aksesToken}">AKSES_TOKEN_HERE</div>
+
+    <div class="label">Refresh Token</div>
+    <div class="token-box" th:text="${resfresh}">REFRESH_TOKEN_HERE</div>
+
+    <div class="footer">
+        Harap simpan token ini dengan aman dan jangan bagikan kepada siapa pun.
+    </div>
+</div>
+</body>
+</html>
