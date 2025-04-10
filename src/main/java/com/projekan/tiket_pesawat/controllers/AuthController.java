@@ -1,7 +1,6 @@
 package com.projekan.tiket_pesawat.controllers;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -57,10 +56,11 @@ public class AuthController {
         @PostMapping("/daftar")
         public ResponseEntity<?> daftar(@RequestBody @Valid RequestRegisUser user) {
                 if (userRepository.existsByEmail(user.getEmail())) {
+                        String pesanError = "Email Tersebut Sudah ada yang menggunakan";
                         return ResponseEntity
                                         .status(HttpStatus.CONFLICT)
-                                        .body(new ResponseApi<>(HttpStatus.CONFLICT.value(),
-                                                        "Email Tersebut Sudah Di Gunakan!"));
+                                        .body(ResponseApi.gagal("Info ada kesalahan", pesanError,
+                                                        HttpStatus.CONFLICT.value()));
                 }
 
                 if (user.getRole() == Role.ADMIN && userRepository.existsByRole(user.getRole())) {
@@ -77,7 +77,8 @@ public class AuthController {
 
                 return ResponseEntity
                                 .status(HttpStatus.CREATED)
-                                .body(new ResponseApi<>(HttpStatus.CREATED.value(), "User Berhasil Di Daftarkan"));
+                                .body(ResponseApi.sukses("Sip!, Data anda sudah berhasil Daftar", userBaru,
+                                                HttpStatus.CREATED.value()));
         }
 
         @PostMapping("/login")
@@ -86,23 +87,24 @@ public class AuthController {
                                 .orElseThrow(() -> new EmailTidakDitemukan("Email Tidak Ditemukan atau salah"));
 
                 if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                        String errorNya = "Password anda salah!";
                         return ResponseEntity
                                         .status(HttpStatus.UNAUTHORIZED)
-                                        .body(new ResponseApi<>(HttpStatus.UNAUTHORIZED.value(),
-                                                        "password anda salah"));
+                                        .body(ResponseApi.gagal("Info ada kesalahan!", errorNya,
+                                                        HttpStatus.UNAUTHORIZED.value()));
                 }
 
                 String role = user.getRole().name();
                 String token = jwtUtil.generateToken(user.getEmail(), role);
                 TokenRefresh tokenRefresh = tokenRefreshService.buatTokenBaru(user.getEmail());
                 emailService.kirimToken(user.getEmail(), token, tokenRefresh.getToken());
-                Map<String, String> responseData = new HashMap<>();
-                responseData.put("role", role);
-
-                ResponseApi<Map<String, String>> responseApi = new ResponseApi<>(HttpStatus.OK.value(),
+                Map<String, String> responseData = Map.of("PesanSukses",
                                 "Token berhasil dikirim ke email, silahkan gunakan Token tersebut untuk Authorize",
-                                responseData);
-                return ResponseEntity.ok(responseApi);
+                                "Role", role);
+
+                return ResponseEntity.ok(ResponseApi.sukses("Berhasil!",
+                                responseData,
+                                HttpStatus.OK.value()));
         }
 
         @PostMapping("/refresh-token")
@@ -131,9 +133,9 @@ public class AuthController {
                 tokenRefreshService.cabutToken(tokenRefresh.getToken());
 
                 emailService.kirimToken(email, tokenAksesBaru, tokenBaru.getToken());
-                ResponseApi<RefreshTokenResponse> responseApi = new ResponseApi<>(
-                                HttpStatus.OK.value(), "Token berhasil direfresh");
-                return ResponseEntity.ok(responseApi);
+                return ResponseEntity.ok(ResponseApi.sukses(
+                                "token berhasil di refresh, silahkan ambil lagi Token akses di email", null,
+                                HttpStatus.OK.value()));
         }
 
         @PostMapping("/logout")
@@ -141,35 +143,39 @@ public class AuthController {
                 String tokenRefresh = request.getRefreshToken();
 
                 if (tokenRefresh == null || tokenRefresh.isEmpty()) {
-                        return ResponseEntity.badRequest().body(new ResponseApi<>(HttpStatus.BAD_REQUEST.value(),
-                                        "token tidak boleh kosong, tolong berikan kode TokenRefresh anda"));
+                        return ResponseEntity.badRequest().body(ResponseApi.gagal(
+                                        "token tidak boleh kosong, tolong berikan kode TokenRefresh anda", null,
+                                        HttpStatus.BAD_REQUEST.value()));
                 }
 
                 tokenRefreshService.logout(tokenRefresh);
-                return ResponseEntity.ok(new ResponseApi<>(HttpStatus.OK.value(),
-                                "Anda Berhasil Logout TokenRefresh anda berhasil di nonaktifkan"));
+                return ResponseEntity.ok(ResponseApi.sukses(
+                                "Anda Berhasil Logout TokenRefresh anda berhasil di nonaktifkan", null,
+                                HttpStatus.OK.value()));
         }
 
         @PostMapping("/request-lupa-password")
         public ResponseEntity<ResponseApi<?>> requestLupaPassword(@RequestParam String email) {
                 if (userRepository.findByEmail(email).isEmpty()) {
-                        return ResponseEntity.badRequest().body(new ResponseApi<>(HttpStatus.BAD_REQUEST.value(),
-                                        "Email anda Belum Terdaftar"));
+                        return ResponseEntity.badRequest().body(ResponseApi.gagal(
+                                        "Email anda Belum Terdaftar", null, HttpStatus.BAD_REQUEST.value()));
                 }
                 otpService.kirimOtp(email);
-                return ResponseEntity.ok(new ResponseApi<>(HttpStatus.OK.value(),
-                                "Kode OTP sudah berhasil dikirim ke Email anda"));
+                return ResponseEntity.ok(ResponseApi.sukses(
+                                "Kode OTP sudah berhasil dikirim ke Email anda", null, HttpStatus.OK.value()));
         }
 
         @PostMapping("/verifikasi-otp")
         public ResponseEntity<ResponseApi<?>> verifikasiOtp(@RequestParam String email, @RequestParam String otp) {
                 boolean valid = otpService.verifikasiOtp(email, otp);
                 if (!valid) {
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseApi<>(
-                                        HttpStatus.UNAUTHORIZED.value(), "Invalid kode OTP anda atau Sudaj expired"));
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseApi.gagal(
+                                        "Invalid kode OTP anda atau Sudah expired", null,
+                                        HttpStatus.UNAUTHORIZED.value()));
                 }
-                return ResponseEntity.ok(new ResponseApi<>(HttpStatus.OK.value(),
-                                "Kode OTP anda sudah, sekarang sudah bisa reset password anda"));
+                return ResponseEntity.ok(ResponseApi.sukses(
+                                "Kode OTP anda sudah, sekarang sudah bisa reset password anda", null,
+                                HttpStatus.OK.value()));
         }
 
         @PostMapping("/reset")
@@ -180,8 +186,9 @@ public class AuthController {
 
                 if (otpOptional.isEmpty()) {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                                        .body(new ResponseApi<>(HttpStatus.FORBIDDEN.value(),
-                                                        "Reset Password Gagal, Kode OTP anda belum di verifikasi"));
+                                        .body(ResponseApi.gagal(
+                                                        "Reset Password Gagal, Kode OTP anda belum di verifikasi", null,
+                                                        HttpStatus.FORBIDDEN.value()));
                 }
 
                 Optional<User> userOtp = userRepository.findByEmail(email);
@@ -193,12 +200,12 @@ public class AuthController {
                         OTP otp = otpOptional.get();
                         otp.setStatus(StatusOtp.EXPIRED);
                         otpRepository.save(otp);
-                        return ResponseEntity.ok(new ResponseApi<>(HttpStatus.OK.value(),
-                                        "Password anda Sudah berhasil diganti dengan Password Baru"));
+                        return ResponseEntity.ok(ResponseApi.sukses(
+                                        "Password anda Sudah berhasil diganti dengan Password Baru", null,
+                                        HttpStatus.OK.value()));
                 }
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseApi<>(HttpStatus.NOT_FOUND.value(),
-                                "Akun anda tidak ditemukan coba cek kembali"));
-                
-                
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseApi.gagal(
+                                "Akun anda tidak ditemukan coba cek kembali", null, HttpStatus.NOT_FOUND.value()));
+
         }
 }

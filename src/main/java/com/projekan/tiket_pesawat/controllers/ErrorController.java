@@ -31,52 +31,51 @@ public class ErrorController {
             errorNya.put(namaField, message);
         });
 
-        ResponseApi<Map<String, String>> responseApi = new ResponseApi<>(
-                HttpStatus.BAD_REQUEST.value(),
-                "Info ada Kesalahan",
-                errorNya);
-        return new ResponseEntity<>(responseApi, HttpStatus.BAD_REQUEST);
+        ResponseApi<Map<String, String>> responseApi = ResponseApi.gagal(
+                "Info ada kesalahan, Validasi gagal",
+                errorNya, HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseApi);
     }
 
     @ExceptionHandler(EmailException.class)
     public ResponseEntity<ResponseApi<?>> handleEmailException(EmailException error) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseApi<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Info ada kesalahan",
-                        error.getMessage()));
+                .body(ResponseApi.gagal("Info ada Kesalahan Pada Email", error.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
     @ExceptionHandler(AdminException.class)
     public ResponseEntity<ResponseApi<?>> handleAdminException(AdminException error) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseApi<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Info ada kesalahan",
-                        error.getMessage()));
+                .body(ResponseApi.gagal("Info ada kesalahan", error.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseApi<?>> handleExpiredToken(ExpiredJwtException error) {
-        Map<String, String> response = new HashMap<>();
-        response.put("pesan", "Tokennya sudah Expired!, silahkan refresh token anda");
+        Map<String, String> response = Map.of("pesan-error", "Tokennya sudah Expired!, silahkan refresh token anda", "error-Nya",
+                error.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ResponseApi<>(HttpStatus.UNAUTHORIZED.value(), "Info ada kesalahan", response));
+                .body(ResponseApi.gagal("Info ada kesalahan", response, HttpStatus.UNAUTHORIZED.value()));
     }
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ResponseApi<?>> handleJwtException(JwtException error) {
-        Map<String, String> response = new HashMap<>();
-        response.put("pesan", "Token anda Tidak valid, silahkan di cek lebih lanjut");
+        Map<String, String> response = Map.of("pesan-error", "Token anda Tidak valid, silahkan di cek lebih lanjut", "error-Nya",
+                error.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ResponseApi<>(HttpStatus.UNAUTHORIZED.value(), "Info ada Kesalahan", response));
+                .body(ResponseApi.gagal("Info ada kesalahan", response, HttpStatus.UNAUTHORIZED.value()));
     }
 
     @ExceptionHandler(EmailTidakDitemukan.class)
     public ResponseEntity<ResponseApi<?>> handleEmailTidakDitemukan(EmailTidakDitemukan error) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ResponseApi<>(HttpStatus.UNAUTHORIZED.value(), error.getMessage()));
+                .body(ResponseApi.gagal("Info ada kesalahan", error.getMessage(), HttpStatus.UNAUTHORIZED.value()));
     }
 
     @ExceptionHandler(TokenTidakDitemukan.class)
     public ResponseEntity<ResponseApi<?>> handleTokenTidakDitemukan(TokenTidakDitemukan error) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ResponseApi<>(HttpStatus.UNAUTHORIZED.value(), error.getMessage()));
+                .body(ResponseApi.gagal("Info ada kesalahan", error.getMessage(), HttpStatus.UNAUTHORIZED.value()));
     }
 }
