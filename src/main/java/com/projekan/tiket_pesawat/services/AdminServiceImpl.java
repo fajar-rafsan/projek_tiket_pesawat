@@ -253,8 +253,8 @@ public class AdminServiceImpl implements AdminService {
             throw new IllegalArgumentException("Ukuran data per halaman harus lebih dari 0.");
         }
 
-        if (!isiFieldYangValid(arahSorting)) {
-            throw new IllegalArgumentException("Kolom urutan tidak valid: " + arahSorting);
+        if (!isiFieldYangValid(urutBerdasarkan)) {
+            throw new IllegalArgumentException("Kolom urutan tidak valid: " + urutBerdasarkan);
         }
 
         if (!arahSortingYangValid(arahSorting)) {
