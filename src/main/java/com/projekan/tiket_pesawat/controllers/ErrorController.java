@@ -14,6 +14,7 @@ import com.projekan.tiket_pesawat.dto.ResponseApi;
 import com.projekan.tiket_pesawat.exception.AdminException;
 import com.projekan.tiket_pesawat.exception.EmailException;
 import com.projekan.tiket_pesawat.exception.EmailTidakDitemukan;
+import com.projekan.tiket_pesawat.exception.StatusTidakValidException;
 import com.projekan.tiket_pesawat.exception.TidakDitemukanException;
 import com.projekan.tiket_pesawat.exception.TokenTidakDitemukan;
 
@@ -97,6 +98,12 @@ public class ErrorController {
 
         @ExceptionHandler(IllegalArgumentException.class)
         public ResponseEntity<ResponseApi<?>> handleBadRequest(IllegalArgumentException error) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(ResponseApi.gagal("Info ada kesalahan!", error.getMessage(),
+                                                HttpStatus.BAD_REQUEST.value()));
+        }
+        @ExceptionHandler(StatusTidakValidException.class)
+        public ResponseEntity<ResponseApi<?>> handleStatusTidakValid(StatusTidakValidException error) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body(ResponseApi.gagal("Info ada kesalahan!", error.getMessage(),
                                                 HttpStatus.BAD_REQUEST.value()));

@@ -67,9 +67,7 @@ public class JwtUtil {
                     .getBody();
             return claimResolver.apply(claims);
         } catch (JwtException error) {
-            // System.out.println("Menerima pesan apakah Jwt error: " + error.getMessage());
-            // throw new RuntimeException("Token nya tersebut tidak valid", error);
-            throw error;
+            throw new JwtException("Menerima pesan apakah Jwt error: " + error.getMessage());
         }
 
     }

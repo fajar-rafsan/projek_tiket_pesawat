@@ -21,7 +21,7 @@ public class LupaPasswordScheduler {
     public void matikanOtpYangSudahExpired() {
         List<OTP> otps = otpRepository.findAll();
         for (OTP otp : otps) {
-            if (otp.getStatus() == StatusOtp.AKTIF &&
+            if (otp.getStatus() == StatusOtp.AKTIF || otp.getStatus() == StatusOtp.DIVERIFIKASI &&
                     otp.getAwalBuatKode().isBefore(LocalDateTime.now())) {
                 otp.setStatus(StatusOtp.EXPIRED);
                 otpRepository.save(otp);
