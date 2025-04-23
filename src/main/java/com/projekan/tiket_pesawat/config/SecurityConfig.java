@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,16 +38,17 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**", "/view/login","/view/register").permitAll()
+            .requestMatchers("/auth/**","/view/**").permitAll()
+            .requestMatchers("/user/*/halaman-verifikasi-pembayaran"
+                        ,"/user/*/konfirmasi-pembayaran").permitAll()
             .requestMatchers("/admin/**").hasAuthority("ADMIN")
             .requestMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
             .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
             .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception.accessDeniedHandler(new HandleJwtPenolakanAkses()))
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(Customizer.withDefaults());
-
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            
             return http.build();
     }
 

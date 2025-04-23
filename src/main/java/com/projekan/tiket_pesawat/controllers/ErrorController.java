@@ -108,4 +108,6 @@ public class ErrorController {
                                 .body(ResponseApi.gagal("Info ada kesalahan!", error.getMessage(),
                                                 HttpStatus.BAD_REQUEST.value()));
         }
+
+        
 }

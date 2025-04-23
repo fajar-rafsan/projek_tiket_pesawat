@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Verifikasi Pembayaran</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+            background-color: #f9f9f9;
+        }
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Verifikasi Pembayaran</h2>
+    <p>Kode Booking: <strong th:text="${booking.kodeBooking}"></strong></p>
+    <p>Nama Penumpang: <strong th:text="${booking.penumpang.nama}"></strong></p>
+    <p>Total Pembayaran: <strong th:text="${booking.totalHarga}"></strong></p>
+
+    <form th:action="@{'/user/' + ${booking.kodeBooking} + '/konfirmasi-pembayaran'}" method="post">
+        <button type="submit" class="btn">Verifikasi Sekarang</button>
+    </form>
+
+    <!-- Jika ingin tampilkan pesan sukses via SweetAlert2 -->
+    <script th:if="${param.sukses}">
+        Swal.fire({
+            title: 'Pembayaran Berhasil!',
+            text: 'Silakan pilih nomor kursi Anda sekarang.',
+            icon: 'success',
+            confirmButtonText: 'Lanjut'
+        });
+    </script>
+
+</body>
+</html>

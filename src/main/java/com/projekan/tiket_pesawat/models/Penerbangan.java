@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,7 +52,26 @@ public class Penerbangan {
 
     private Integer kursi;
 
+    @Enumerated(EnumType.STRING)
+    private KetersediaanPenerbangan ketersediaanPenerbangan;
+
+    @Enumerated(EnumType.STRING)
+    private StatusPenerbangan statusPenerbangan;
+
     @OneToMany(mappedBy = "penerbangan", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UpdatePenerbanganHistory> histories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "penerbangan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Kursi> listKursi = new ArrayList<>();
+
+    @OneToMany(mappedBy = "penerbangan",cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Tiket> listTiket = new ArrayList<>();
+
+    @OneToMany(mappedBy = "penerbangan",cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Booking> listBooking = new ArrayList<>();
+
 }

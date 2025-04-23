@@ -3,12 +3,14 @@ package com.projekan.tiket_pesawat.services;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.projekan.tiket_pesawat.dto.PenerbanganResponseDto;
 import com.projekan.tiket_pesawat.dto.PenerbanganUpdateDto;
 import com.projekan.tiket_pesawat.exception.StatusTidakValidException;
 import com.projekan.tiket_pesawat.exception.TidakDitemukanException;
@@ -261,7 +264,6 @@ public class AdminServiceImpl implements AdminService {
             throw new IllegalArgumentException("Arah pengurutan hanya boleh 'asc' atau 'desc' aja.");
         }
 
-
         Sort urutan = arahSorting.equalsIgnoreCase("desc")
                 ? Sort.by(urutBerdasarkan).descending()
                 : Sort.by(urutBerdasarkan).ascending();
@@ -284,5 +286,26 @@ public class AdminServiceImpl implements AdminService {
 
     public boolean arahSortingYangValid(String arahSorting) {
         return arahSorting.equalsIgnoreCase("asc") || arahSorting.equalsIgnoreCase("desc");
+    }
+
+    @Override
+    public List<PenerbanganResponseDto> ambilPenerbanganTersedia(String dari, String ke, LocalDate tanggal){
+        List<Penerbangan> listPenerbangan = penerbanganRepository.findFiltered(dari, ke, tanggal);
+
+        return listPenerbangan.stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+    }
+
+    private PenerbanganResponseDto mapToResponse(Penerbangan p) {
+        return PenerbanganResponseDto.builder()
+                .id(p.getId())
+                .maskapai(p.getMaskapai())
+                .kotaKeberangkatan(p.getKotaKeberangkatan())
+                .kotaTujuan(p.getKotaTujuan())
+                .waktuKeberangkatan(p.getWaktuKeberangkatan())
+                .waktuKedatangan(p.getWaktuKedatangan())
+                .hargaTiket(p.getHargaTiket())
+                .build();
     }
 }

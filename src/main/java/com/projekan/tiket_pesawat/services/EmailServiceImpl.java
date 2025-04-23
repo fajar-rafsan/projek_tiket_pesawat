@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setPriority(1);
-            helper.setSubject("Kode Akses Anda – Jangan Berikan ke Siapa Pun");
+            helper.setSubject("Kode Akses Aman Untuk Verifikasi Anda");
             helper.setFrom(asalEmail);
             helper.setTo(email);
             helper.setText(htmlKonten, true);
