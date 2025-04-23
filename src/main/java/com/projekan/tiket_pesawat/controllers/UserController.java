@@ -40,6 +40,7 @@ import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.projekan.tiket_pesawat.dto.KursiResponseDto;
 import com.projekan.tiket_pesawat.dto.PemesananTiketRequestDto;
 import com.projekan.tiket_pesawat.dto.PenerbanganResponseDto;
 import com.projekan.tiket_pesawat.dto.ResponseApi;
@@ -60,6 +61,7 @@ import com.projekan.tiket_pesawat.repository.PenumpangRepository;
 import com.projekan.tiket_pesawat.repository.TiketRepository;
 import com.projekan.tiket_pesawat.repository.UserRepository;
 import com.projekan.tiket_pesawat.services.AdminService;
+import com.projekan.tiket_pesawat.services.KursiService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +78,7 @@ public class UserController {
         private final BookingRepository bookingRepository;
         private final UserRepository userRepository;
         private final AdminService adminService;
+        private final KursiService kursiService;
 
         @PostMapping(value = "/pemesanan", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         @Operation(summary = "Pesan Tiket Pesawat", description = "Cek Dulu Penerbangan yang aktif")
@@ -171,7 +174,7 @@ public class UserController {
                 return ResponseEntity.ok(response);
         }
 
-        @PostMapping("/pemilikan-nomor-kursi")
+        @PostMapping("/pemilihan-nomor-kursi")
         @Operation(summary = "Buat Pilih Nomor Kursi", description = "Silahkan Cek Dulu Kursi yang Tersedia, Sebelum Memilih Kursi Id")
         public ResponseEntity<?> pilihNomorKursi(@RequestParam String kodeBooking, @RequestParam Long kursiId,
                         Principal principal) {
@@ -310,5 +313,11 @@ public class UserController {
                 List<PenerbanganResponseDto> response = adminService.ambilPenerbanganTersedia(dari, ke, tanggal);
                 return ResponseEntity.ok(
                                 ResponseApi.sukses("Data Penerbangan Yang Tersedia", response, HttpStatus.OK.value()));
+        }
+
+        @GetMapping("/melihat-kursi-tersedia")
+        public ResponseEntity<?> melihatDataKursi(@RequestParam String kodeBooking){
+                List<KursiResponseDto> response = kursiService.ambilDataKursiTersedia(kodeBooking);
+                return ResponseEntity.ok(ResponseApi.sukses("Data Berhasil Di Dapat",response, HttpStatus.OK.value()));
         }
 }
