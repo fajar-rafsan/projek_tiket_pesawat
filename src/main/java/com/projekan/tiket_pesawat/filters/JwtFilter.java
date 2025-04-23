@@ -2,7 +2,6 @@ package com.projekan.tiket_pesawat.filters;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +37,16 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.startsWith("/auth")
             || path.startsWith("/swagger-ui")
-            || path.startsWith("/v3/api-docs");
+            || path.startsWith("/v3/api-docs")
+            || path.matches("/user/.*/halaman-verifikasi-pembayaran")
+            || path.matches("/user/.*/konfirmasi-pembayaran");
     }
+    
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
         System.out.println("Authorization Header: " + authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

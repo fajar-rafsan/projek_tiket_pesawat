@@ -1,5 +1,7 @@
 package com.projekan.tiket_pesawat.models;
 
+// import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,4 +32,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
 }

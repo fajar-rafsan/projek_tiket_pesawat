@@ -1,5 +1,5 @@
 package com.projekan.tiket_pesawat.models;
 
 public enum StatusPembayaran {
-    PENDING,SUCCESS,FAILED
+    SUDAH_DIBAYAR, BELUM_DIBAYAR,CANCEL
 }

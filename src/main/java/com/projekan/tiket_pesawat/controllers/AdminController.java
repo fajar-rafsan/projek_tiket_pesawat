@@ -9,7 +9,11 @@ import com.projekan.tiket_pesawat.dto.PenerbanganUpdateDto;
 import com.projekan.tiket_pesawat.dto.ResponseApi;
 import com.projekan.tiket_pesawat.exception.AdminException;
 import com.projekan.tiket_pesawat.exception.TidakDitemukanException;
+import com.projekan.tiket_pesawat.models.KetersediaanPenerbangan;
+import com.projekan.tiket_pesawat.models.Kursi;
 import com.projekan.tiket_pesawat.models.Penerbangan;
+import com.projekan.tiket_pesawat.models.StatusPenerbangan;
+import com.projekan.tiket_pesawat.repository.KursiRepository;
 import com.projekan.tiket_pesawat.repository.PenerbanganRepository;
 import com.projekan.tiket_pesawat.services.AdminService;
 
@@ -18,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.InputStreamResource;
@@ -41,7 +47,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
         private final PenerbanganRepository penerbanganRepository;
         private final AdminService adminService;
-
+        private final KursiRepository kursiRepository;
+        
         @PostMapping("tambah-penerbangan")
         public ResponseEntity<ResponseApi<?>> tambahPenerbangan(@RequestBody @Valid PenerbanganDto request) {
 
@@ -60,6 +67,11 @@ public class AdminController {
 
                 }
 
+                int totalKursi = request.getKursi();
+                List<Kursi> listKursi = new ArrayList<>();
+                List<String> kursiNya = new ArrayList<>();
+
+
                 Penerbangan penerbanganDataBaru = Penerbangan.builder()
                                 .maskapai(request.getMaskapai())
                                 .kotaKeberangkatan(request.getKotaKeberangkatan())
@@ -68,10 +80,37 @@ public class AdminController {
                                 .waktuKedatangan(request.getWaktuKedatangan())
                                 .hargaTiket(request.getHargaTiket())
                                 .kursi(request.getKursi())
+                                .ketersediaanPenerbangan(KetersediaanPenerbangan.TERSEDIA)
+                                .statusPenerbangan(StatusPenerbangan.ON_TIME)
                                 .histories(null).build();
+
+                int baris = 0;
+                int colum = 0;
+
+                for (int i = 1; i <= totalKursi; i++) {
+                        char barisChar = (char) ('A' + baris);
+                        colum++;
+
+                        String nomorKursi = barisChar + String.valueOf(colum);
+                        Kursi kursi = Kursi.builder()
+                                        .nomorkursi(nomorKursi)
+                                        .penerbangan(penerbanganDataBaru)
+                                        .kursiTersedia(true)
+                                        .build();
+                        listKursi.add(kursi);
+                        kursiNya.add(nomorKursi);
+
+                        if (colum == 6) {
+                                baris++;
+                                colum = 0;
+                        }
+
+                }
                 penerbanganRepository.save(penerbanganDataBaru);
+                kursiRepository.saveAll(listKursi);
+                Map<String,Object> response = Map.of("data_baru_penerbangan", penerbanganDataBaru, "list_kursi", kursiNya);
                 return ResponseEntity
-                                .ok(ResponseApi.sukses("Data Penerbangan Berhasil Di Tambahkan", penerbanganDataBaru,
+                                .ok(ResponseApi.sukses("Data Penerbangan Berhasil Di Tambahkan", response,
                                                 HttpStatus.OK.value()));
         }
 
