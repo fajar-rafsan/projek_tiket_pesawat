@@ -12,9 +12,10 @@ import com.projekan.tiket_pesawat.models.Penerbangan;
 
 @Repository
 public interface PenerbanganRepository extends JpaRepository<Penerbangan, Long> {
-    @Query("SELECT p FROM Penerbangan p" + "WHERE(:dariKota IS NULL OR LOWER(p.kotaKeberangkatan) LIKE LOWER(CONCAT('%', :keKota, '%')))"
-            + "AND (:keKota IS NULL OR LOWER(p.kotaTujuan) LIKE LOWER(CONCAT('%', :keKota, '%')))"
-            + "AND (: tanggal IS NULL OR DATE(p.waktuKeberangkatan) = :tanggal)")
-    List<Penerbangan> findFiltered(@Param("dariKota") String dariKota, @Param("keKota") String keKota,
-            @Param("tanggal") LocalDate tanggal);
+        @Query("SELECT p FROM Penerbangan p "
+                        + "WHERE(:dariKota IS NULL OR LOWER(p.kotaKeberangkatan) LIKE LOWER(CONCAT('%', :keKota, '%')))"
+                        + "AND (:keKota IS NULL OR LOWER(p.kotaTujuan) LIKE LOWER(CONCAT('%', :keKota, '%')))"
+                        + "AND (: tanggal IS NULL OR DATE(p.waktuKeberangkatan) = :tanggal)")
+        List<Penerbangan> findFiltered(@Param("dariKota") String dariKota, @Param("keKota") String keKota,
+                        @Param("tanggal") LocalDate tanggal);
 }
