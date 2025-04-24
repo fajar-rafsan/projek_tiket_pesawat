@@ -4,15 +4,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projekan.tiket_pesawat.dto.HistoriPemesananDto;
 import com.projekan.tiket_pesawat.dto.PenerbanganDto;
 import com.projekan.tiket_pesawat.dto.PenerbanganUpdateDto;
 import com.projekan.tiket_pesawat.dto.ResponseApi;
 import com.projekan.tiket_pesawat.exception.AdminException;
 import com.projekan.tiket_pesawat.exception.TidakDitemukanException;
+import com.projekan.tiket_pesawat.models.Booking;
 import com.projekan.tiket_pesawat.models.KetersediaanPenerbangan;
 import com.projekan.tiket_pesawat.models.Kursi;
 import com.projekan.tiket_pesawat.models.Penerbangan;
+import com.projekan.tiket_pesawat.models.Penumpang;
 import com.projekan.tiket_pesawat.models.StatusPenerbangan;
+import com.projekan.tiket_pesawat.repository.BookingRepository;
 import com.projekan.tiket_pesawat.repository.KursiRepository;
 import com.projekan.tiket_pesawat.repository.PenerbanganRepository;
 import com.projekan.tiket_pesawat.services.AdminService;
@@ -25,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
@@ -48,7 +53,8 @@ public class AdminController {
         private final PenerbanganRepository penerbanganRepository;
         private final AdminService adminService;
         private final KursiRepository kursiRepository;
-        
+        private final BookingRepository bookingRepository;
+
         @PostMapping("tambah-penerbangan")
         public ResponseEntity<ResponseApi<?>> tambahPenerbangan(@RequestBody @Valid PenerbanganDto request) {
 
@@ -70,7 +76,6 @@ public class AdminController {
                 int totalKursi = request.getKursi();
                 List<Kursi> listKursi = new ArrayList<>();
                 List<String> kursiNya = new ArrayList<>();
-
 
                 Penerbangan penerbanganDataBaru = Penerbangan.builder()
                                 .maskapai(request.getMaskapai())
@@ -108,7 +113,8 @@ public class AdminController {
                 }
                 penerbanganRepository.save(penerbanganDataBaru);
                 kursiRepository.saveAll(listKursi);
-                Map<String,Object> response = Map.of("data_baru_penerbangan", penerbanganDataBaru, "list_kursi", kursiNya);
+                Map<String, Object> response = Map.of("data_baru_penerbangan", penerbanganDataBaru, "list_kursi",
+                                kursiNya);
                 return ResponseEntity
                                 .ok(ResponseApi.sukses("Data Penerbangan Berhasil Di Tambahkan", response,
                                                 HttpStatus.OK.value()));
@@ -184,6 +190,31 @@ public class AdminController {
                 Page<Penerbangan> data = adminService.ambilDataPenerbangan(page, size, urutanBerdasarkan, arah);
 
                 return ResponseEntity.ok(ResponseApi.sukses("Data Berhasil DiTampilkan", data, HttpStatus.OK.value()));
+        }
+
+        @GetMapping("/histori-pemesanan")
+        public ResponseEntity<?> getHistoriPemesanan() {
+                List<Booking> listBooking = bookingRepository.findAll();
+
+                List<HistoriPemesananDto> result = listBooking.stream().map(booking -> {
+                        Penerbangan penerbangan = booking.getPenerbangan();
+                        Penumpang penumpang = booking.getPenumpang();
+
+                        return new HistoriPemesananDto(
+                                        penumpang.getNama(),
+                                        penumpang.getUser().getEmail(),
+                                        booking.getKodeBooking(),
+                                        penerbangan.getMaskapai(),
+                                        penerbangan.getKotaKeberangkatan(),
+                                        penerbangan.getKotaTujuan(),
+                                        penerbangan.getWaktuKeberangkatan(),
+                                        penerbangan.getWaktuKedatangan(),
+                                        booking.getTotalHarga(),
+                                        booking.getStatusPembayaran(),
+                                        booking.getWaktuBooking());
+                }).collect(Collectors.toList());
+
+                return ResponseEntity.ok(ResponseApi.sukses("Histori Pemesanan Tiket", result, HttpStatus.OK.value()));
         }
 
 }
