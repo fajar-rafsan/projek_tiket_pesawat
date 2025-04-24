@@ -571,48 +571,51 @@
         })
         .then(data => {
             console.log(data);
-            // Redirect or show success message
-            window.location.href = '/user/dashboard'; // Change to your desired URL
+            if(data.data.Role=='ADMIN')
+                window.location.href = '/admin/dashboard'; // Change to your desired URL
+            else
+                window.location.href = '/user/dashboard';
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Login failed. Please try again.');
         });
     });
-    document.getElementById('signupForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
+     document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman form secara default
 
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const role = document.getElementById('role').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-password-confirm').value;
 
-        fetch('/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                role: role
+            fetch('/auth/daftar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    role: role
+                })
             })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Signup failed: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            // Redirect or show success message
-            window.location.href = '/user/dashboard'; // Change to your desired URL
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Signup failed. Please try again.');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Pendaftaran gagal: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Proses data yang diterima dari server
+                console.log(data);
+                // Redirect atau tampilkan pesan sukses
+                window.location.href = '/user/dashboard'; // Ganti dengan URL yang sesuai
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Pendaftaran gagal. Silakan coba lagi.');
+            });
         });
-    });
 </script>
 </body>
 </html>
