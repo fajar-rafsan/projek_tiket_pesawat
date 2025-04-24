@@ -8,11 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.projekan.tiket_pesawat.utils.JwtUtil;
 import com.projekan.tiket_pesawat.dto.RefreshTokenRequestDto;
@@ -80,8 +76,8 @@ public class AuthController {
                                 .body(ResponseApi.sukses("Sip!, Data anda sudah berhasil Daftar", userBaru,
                                                 HttpStatus.CREATED.value()));
         }
-
         @PostMapping("/login")
+        @ResponseBody
         public ResponseEntity<?> login(@RequestBody @Valid RequestLoginDto request) {
                 User user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new EmailTidakDitemukan("Email Tidak Ditemukan atau salah"));

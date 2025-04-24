@@ -38,7 +38,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**").permitAll()
+            .requestMatchers("/auth/**","/view/**").permitAll()
             .requestMatchers("/user/*/halaman-verifikasi-pembayaran"
                         ,"/user/*/konfirmasi-pembayaran").permitAll()
             .requestMatchers("/admin/**").hasAuthority("ADMIN")
