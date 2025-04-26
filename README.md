@@ -71,6 +71,3 @@ Sistem ini menyediakan layanan pemesanan tiket pesawat untuk **User** dan manaje
 - **User**: Akses untuk melihat penerbangan, melakukan pemesanan, dan mengelola tiket.
 
 ---
-
-Kalau mau sekalian saya buatin contoh struktur folder dan API endpoint-nya juga, mau lanjut? 🚀  
-Mau sekalian saya buatkan juga contoh tabel database sederhananya? 🎯
