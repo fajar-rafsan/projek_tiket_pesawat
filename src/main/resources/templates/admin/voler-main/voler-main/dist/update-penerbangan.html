@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Layout - Voler Admin Dashboard</title>
+    
+    <!-- Menggunakan Thymeleaf untuk mengubah jalur file -->
+    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/app.css}" rel="stylesheet">
+    <link th:href="@{/assets/images/favicon.svg}" rel="shortcut icon" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class='active'>
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img th:src="@{/assets/images/logo.svg}" alt="" />
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class='sidebar-title'>ADMIN</li>
+                        <li class="sidebar-item active">
+                            <a th:href="@{/viewAdmin/dashboard}" class="sidebar-link">
+                                <i data-feather="home" width="20"></i> 
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="triangle" width="20"></i> 
+                                <span>Penerbangan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/viewAdmin/tambah-penerbangan}">Tambah Penerbangan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/data-penerbangan}">Data Penerbangan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/update-history-penerbangan}">Update History Penerbangan</a>
+                                </li>
+                            </ul>
+                            </li>
+
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="file-text" width="20"></i> 
+                                <span>Pemesanan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/viewAdmin/data-pemesanan}">History Pemesanan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/status-pemesanan}">Status Pemesanan</a>
+                                </li>
+                            </ul>
+                            </li>
+                        <li class="sidebar-item active">
+                            <a th:href="@{/view/login}" class="sidebar-link">
+                                <i data-feather="log-out"></i>
+                                <span>Log out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+
+        <div id="main">
+            <nav class="navbar navbar-header navbar-expand navbar-light">
+                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                        <li class="dropdown nav-icon">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="d-lg-inline-block">
+                                    <i data-feather="bell"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown nav-icon me-2">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="d-lg-inline-block">
+                                    <i data-feather="mail"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="avatar me-1">
+                                    <img th:src="@{/assets/images/avatar/avatar-s-1.png}" alt="" />
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="main-content container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/viewAdmin/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Update Penerbangan</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="multiple-column-form">
+                    <div class="row match-height">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Update Penerbangan</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <form class="form">
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="first-name-column">Maskapai</label>
+                                                        <input type="text" id="first-name-column" class="form-control" placeholder="Maskapai" name="fname-column">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="country-floating">Harga Tiket</label>
+                                                        <input type="number" id="country-floating" class="form-control" name="country-floating" placeholder="Harga Tiket">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="last-name-column">Kota Keberangkatan</label>
+                                                        <input type="text" id="last-name-column" class="form-control" placeholder="Kota Keberangkatan" name="lname-column">
+                                                    </div>
+                                                </div>
+                                              
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="country-floating">Kota Tujuan</label>
+                                                        <input type="text" id="country-floating" class="form-control" name="country-floating" placeholder="Kota Tujuan">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="company-column">Waktu keberangkatan</label>
+                                                        <input type="date" id="company-column" class="form-control" name="company-column" placeholder="Waktu keberangkatan">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="email-id-column">Waktu Kedatangan</label>
+                                                        <input type="date" id="email-id-column" class="form-control" name="email-id-column" placeholder="Waktu Kedatangan">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="country-floating">Kursi</label>
+                                                        <input type="number" id="country-floating" class="form-control" name="country-floating" placeholder="Kursi">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="status-penerbangan">Status Penerbangan</label>
+                                                        <select id="status-penerbangan" class="form-control" name="status-penerbangan">
+                                                            <option value="">-- Pilih Status --</option>
+                                                            <option value="ONTIME">ONTIME</option>
+                                                            <option value="ARRIVED">ARRIVED</option>
+                                                            <option value="DEPARTED">DEPARTED</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="ketersediaan-penerbangan">Ketersediaan Penerbangan</label>
+                                                        <select id="ketersediaan-penerbangan" class="form-control" name="ketersediaan-penerbangan">
+                                                            <option value="">-- Pilih Ketersediaan --</option>
+                                                            <option value="TERSEDIA">TERSEDIA</option>
+                                                            <option value="TIDAK_TERSEDIA">TIDAK_TERSEDIA</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12 d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary me-1 mb-1">Edit</button>
+                                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">Batal</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; HIGHLIGHTFLIGHT</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Crafted with by Kelompok 5</p>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+    
+    <script th:src="@{/assets/js/feather-icons/feather.min.js}"></script>
+    <script th:src="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+</html>

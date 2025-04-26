@@ -38,11 +38,15 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**","/view/**").permitAll()
+            .requestMatchers("/auth/**","/view/**","/viewAdmin/**","/assets/**").permitAll()
             .requestMatchers("/user/*/halaman-verifikasi-pembayaran"
                         ,"/user/*/konfirmasi-pembayaran").permitAll()
-            .requestMatchers("/admin/**").hasAuthority("ADMIN")
-            .requestMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
+            // .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").permitAll()
+
+            // .requestMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
+            .requestMatchers("/user/**").permitAll()
+
             .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
             .anyRequest().authenticated()
             )

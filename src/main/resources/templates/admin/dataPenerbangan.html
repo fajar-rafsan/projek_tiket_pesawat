@@ -1,0 +1,49 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Data Penerbangan</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f8ff; padding: 20px; }
+        h2 { color: #004080; }
+        table { width: 100%; border-collapse: collapse; background-color: #ffffff; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #0073e6; color: white; }
+        tr:nth-child(even) { background-color: #f2f9ff; }
+        .btn { padding: 8px 12px; border: none; cursor: pointer; color: white; border-radius: 4px; }
+        .btn-update { background-color: #0073e6; }
+        .btn-delete { background-color: #cc0000; }
+    </style>
+</head>
+<body>
+    <h2>Data Penerbangan</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Maskapai</th>
+                <th>Keberangkatan</th>
+                <th>Tujuan</th>
+                <th>Waktu Keberangkatan</th>
+                <th>Harga Tiket</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${penerbanganList}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${p.maskapai}"></td>
+                <td th:text="${p.kotaKeberangkatan}"></td>
+                <td th:text="${p.kotaTujuan}"></td>
+                <td th:text="${#dates.format(p.waktuKeberangkatan, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="${p.hargaTiket}"></td>
+                <td>
+                    <a th:href="@{'/admin/updatePenerbangan.html?id=' + ${p.id}}" class="btn btn-update">Update</a>
+                    <form th:action="@{'/admin/' + ${p.id} + '/hapus-penerbangan'}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-delete">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html> -->

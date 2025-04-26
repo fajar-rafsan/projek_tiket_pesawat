@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Layout - Voler Admin Dashboard</title>
+    
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.svg}" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img th:src="@{/assets/images/logo.svg}" alt="Logo">
+                </div>
+    
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">ADMIN</li>
+    
+                        <li class="sidebar-item active">
+                            <a th:href="@{/viewAdmin/dashboard}" class="sidebar-link">
+                                <i data-feather="home" width="20"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+    
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i data-feather="triangle" width="20"></i>
+                                <span>Penerbangan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/viewAdmin/tambah-penerbangan}">Tambah Penerbangan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/data-penerbangan}">Data Penerbangan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/update-history-penerbangan}">Update History Penerbangan</a>
+                                </li>
+                            </ul>
+                        </li>
+    
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i data-feather="file-text" width="20"></i>
+                                <span>Pemesanan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/viewAdmin/data-pemesanan}">History Pemesanan</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewAdmin/status-pemesanan}">Status Pemesanan</a>
+                                </li>
+                            </ul>
+                        </li>
+    
+                        <li class="sidebar-item active">
+                            <a th:href="@{/view/login}" class="sidebar-link">
+                                <i data-feather="log-out"></i>
+                                <span>Log out</span>
+                            </a>
+                        </li>
+    
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+    
+    </div>
+    <script th:src="@{/assets/js/feather-icons/feather.min.js}"></script>
+    <script th:src="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+    </body>
+</html>

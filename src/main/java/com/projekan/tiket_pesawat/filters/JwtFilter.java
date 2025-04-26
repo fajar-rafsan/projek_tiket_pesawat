@@ -2,7 +2,6 @@ package com.projekan.tiket_pesawat.filters;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,9 @@ public class JwtFilter extends OncePerRequestFilter {
         return path.startsWith("/auth")
             || path.startsWith("/swagger-ui")
             || path.startsWith("/v3/api-docs")
-            ||path.startsWith("/view");
+            ||path.startsWith("/view")
+            || path.startsWith("/viewAdmin")
+            || path.startsWith("/assets");
     }
 
     @Override

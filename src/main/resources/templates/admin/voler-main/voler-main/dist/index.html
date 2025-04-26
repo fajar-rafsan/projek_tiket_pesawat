@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HightLight-Dashboard</title>
+    
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/chartjs/Chart.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.svg}" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img th:src="@{/assets/images/logo.svg}" alt="Logo" srcset="">
+                </div>
+
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class="sidebar-title">ADMIN</li>
+
+                        <li class="sidebar-item active">
+                            <a th:href="@{/viewAdmin/dashboard}" class="sidebar-link">
+                                <i data-feather="home" width="20"></i> 
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i data-feather="triangle" width="20"></i> 
+                                <span>Penerbangan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a th:href="@{/viewAdmin/tambah-penerbangan}">Tambah Penerbangan</a></li>
+                                <li><a th:href="@{/viewAdmin/data-penerbangan}">Data Penerbangan</a></li>
+                                <li><a th:href="@{/viewAdmin/update-history-penerbangan}">Update History Penerbangan</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i data-feather="file-text" width="20"></i> 
+                                <span>Pemesanan</span>
+                            </a>
+                            <ul class="submenu">
+                                <li><a th:href="@{/viewAdmin/data-pemesanan}">History Pemesanan</a></li>
+                                <li><a th:href="@{/viewAdmin/status-pemesanan}">Status Pemesanan</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a th:href="@{/view/login}" class="sidebar-link">
+                                <i data-feather="log-out"></i> 
+                                <span>Log out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+
+        <div id="main">
+            <nav class="navbar navbar-header navbar-expand navbar-light">
+                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                        <li class="dropdown nav-icon">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="d-lg-inline-block">
+                                    <i data-feather="bell"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown nav-icon me-2">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="d-lg-inline-block">
+                                    <i data-feather="mail"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="avatar me-1">
+                                    <img th:src="@{/assets/images/avatar/avatar-s-1.png}" alt="Avatar" srcset="">
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="main-content container-fluid">
+                <div class="page-title">
+                    <h3>SELAMAT DATANG DI HALAMAN ADMIN</h3>
+                </div>
+
+                <section class="section">
+                    <div class="row mb-2">
+                        <div class="col-12 col-md-3">
+                            <a th:href="@{/viewAdmin/tambah-penerbangan}">
+                                <div class="card card-statistic">
+                                    <div class="card-body p-0">
+                                        <div class="d-flex flex-column">
+                                            <div class="px-3 py-3 d-flex justify-content-between">
+                                                <h3 class="card-title">TAMBAH PENERBANGAN</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <a th:href="@{/viewAdmin/data-penerbangan}">
+                                <div class="card card-statistic">
+                                    <div class="card-body p-0">
+                                        <div class="d-flex flex-column">
+                                            <div class="px-3 py-3 d-flex justify-content-between">
+                                                <h3 class="card-title">DATA PENERBANGAN</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <a th:href="@{/viewAdmin/history-pemesanan}">
+                                <div class="card card-statistic">
+                                    <div class="card-body p-0">
+                                        <div class="d-flex flex-column">
+                                            <div class="px-3 py-3 d-flex justify-content-between">
+                                                <h3 class="card-title">HISTORI PEMESANAN</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div style="display: flex; align-items: center;">
+                            <img th:src="@{https://i.pinimg.com/736x/9a/0c/e4/9a0ce4c1ec17483fc9cd1e5606dedd7b.jpg}" alt="Flight Image" style="width: 70%;">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; HIGHLIGHTFLIGHT</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Crafted with by Kelompok 5</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script th:src="@{/assets/js/feather-icons/feather.min.js}"></script>
+    <script th:src="@{/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+    
+    <script th:src="@{/assets/vendors/chartjs/Chart.min.js}"></script>
+    <script th:src="@{/assets/vendors/apexcharts/apexcharts.min.js}"></script>
+    <script th:src="@{/assets/js/pages/dashboard.js}"></script>
+
+    <script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

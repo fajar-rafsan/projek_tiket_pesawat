@@ -1,0 +1,179 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Flight Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6f2ff;
+            padding: 40px;
+            color: #003366;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background-color: #004080;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #00264d;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #004080;
+        }
+
+        form label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #cccccc;
+            color: #333;
+        }
+
+        .btn-submit:hover {
+            background-color: #005f99;
+        }
+
+        .btn-cancel:hover {
+            background-color: #aaaaaa;
+        }
+    </style>
+</head>
+<body>
+
+    <a th:href="@{/viewAdmin/dashboard}" class="btn-back">← Kembali ke Dashboard</a>
+
+    <div class="container">
+        <h2>Tambah Data Penerbangan</h2>
+
+        <form id="addFlightForm">
+            <label for="maskapai">Nama Maskapai</label>
+            <input type="text" name="maskapai" id="maskapai" required>
+
+            <label for="kotaKeberangkatan">Kota Keberangkatan</label>
+            <input type="text" name="kotaKeberangkatan" id="kotaKeberangkatan" required>
+
+            <label for="kotaTujuan">Kota Tujuan</label>
+            <input type="text" name="kotaTujuan" id="kotaTujuan" required>
+
+            <label for="waktuKeberangkatan">Waktu Keberangkatan</label>
+            <input type="datetime-local" name="waktuKeberangkatan" id="waktuKeberangkatan" required>
+
+            <label for="waktuKedatangan">Waktu Kedatangan</label>
+            <input type="datetime-local" name="waktuKedatangan" id="waktuKedatangan" required>
+
+            <label for="hargaTiket">Harga Tiket</label>
+            <input type="number" name="hargaTiket" id="hargaTiket" required>
+
+            <label for="kursi">Jumlah Kursi</label>
+            <input type="number" name="kursi" id="kursi" min="1" required>
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit">Tambah</button>
+                <button type="button" class="btn-cancel" onclick="resetForm()">Batal</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function resetForm() {
+            document.getElementById('addFlightForm').reset();
+        }
+
+        document.getElementById('addFlightForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const token = localStorage.getItem('token'); 
+            if (!token) {
+                alert('Token tidak ditemukan. Silakan login terlebih dahulu.');
+                return;
+            }
+
+            const data = {
+                maskapai: document.getElementById('maskapai').value,
+                kotaKeberangkatan: document.getElementById('kotaKeberangkatan').value,
+                kotaTujuan: document.getElementById('kotaTujuan').value,
+                waktuKeberangkatan: document.getElementById('waktuKeberangkatan').value,
+                waktuKedatangan: document.getElementById('waktuKedatangan').value,
+                hargaTiket: parseFloat(document.getElementById('hargaTiket').value),
+                kursi: parseInt(document.getElementById('kursi').value)
+            };
+
+            try {
+                const response = await fetch('/admin/tambah-penerbangan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.pesan || 'Penerbangan berhasil ditambahkan!');
+                    console.log(result.data);
+                } else {
+                    alert(result.error || 'Gagal menambahkan penerbangan.');
+                    console.error(result.data);
+                }
+
+            } catch (err) {
+                console.error('Terjadi kesalahan:', err);
+                alert('Terjadi kesalahan saat mengirim data: ' + err);
+            }
+        });
+    </script>
+</body>
+</html> -->
